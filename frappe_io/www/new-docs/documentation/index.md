@@ -7,7 +7,7 @@
 1. [Controllers](#controllers)
     - [Controller Methods](#controller-methods)
     - [Controller Hooks](#controller-hooks)
-1. Child DocType
+1. [Child DocType](#child-doctype)
 1. Single DocType
 1. Routing
 1. Translations
@@ -262,7 +262,8 @@ To create a new document and save it to the database,
 doc = frappe.get_doc({
     'doctype': 'Person',
     'first_name': 'John',
-    'last_name': 'Doe'
+    'last_name': 'Doe',
+    'email': 'johndoe@example.com`
 })
 doc.insert()
 
@@ -285,3 +286,36 @@ doc.creation # datetime.datetime(2018, 9, 20, 12, 39, 34, 236801)
 doc.owner # faris@erpnext.com
 ```
 
+**3. Modify document fields**
+
+To modify any field of an existing document
+
+```python
+doc = frappe.get_doc('Person', '000001')
+
+# modify the document field
+doc.email = 'john@example.com'
+
+# save changes
+doc.save()
+
+# commit changes to the database
+frappe.db.commit()
+```
+
+## Child Doctype
+
+Frappe allows us to create child tables as a separate DocType. To set a DocType as child table, we need to select the `Is Child Table` check while creating it.
+The child table is visible as a grid in the parent Document, it is binded to the parent DocType, that means deleting the parent document results in the deletion of it's child table entries too.
+
+<img src="/new-docs/assets/child-doctype/child-table-example.png" alt="child table example" class="screenshot" style="width: 50%;">
+
+> A Child Table inherits the permissions of the parent DocType.
+
+### Adding a child table
+
+To add a child table we can simply add a field of type Table as follows.
+
+<img src="/new-docs/assets/child-doctype/child-table-field-in-doctype.png" alt="adding a child table to your doctype" class="screenshot" style="width: 50%;">
+
+In the option field we need to specify the Child DocType name.
